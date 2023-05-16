@@ -1,5 +1,6 @@
 const { initializeApp } = require('firebase/app');
-const { getAuth, createUserWithEmailAndPassword } = require('firebase/auth');
+//import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+const { getAuth, signInWithEmailAndPassword,signInAnonymously } = require('firebase/auth');
 
 
 const firebaseConfig = {
@@ -17,21 +18,34 @@ const auth = getAuth(app);
 
 async function hi() {
     try {
-        const email = 'quit@gmail.com';
-        const password = 'quitNow2#$21UiJ';
+        const email = 'quit699@gmail.com';
+        const password = 'SuperL8O#@#ngPass3Ord';
 
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const idToken = await userCredential.user.getIdToken();
+         console.log('ID token:', idToken);
         // Create user
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        console.log('User created:', userCredential.user.uid);
+       // const userCredential = await getAuth().signInWithEmailAndPassword(auth, email, password);
+        //console.log('User created:', userCredential.user.uid);
 
         // Get ID token
-        const idToken = await userCredential.user.getIdToken();
-        console.log('ID token:', idToken);
+      //  const idToken = await userCredential.user.getIdToken();
+      //  console.log('ID token:', idToken);
     } catch (error) {
         console.log('Error:', error);
     }
 }
 
-hi().then(() => {
+async function getAnonToken() {
+    try {
+        const userCredential = await signInAnonymously(auth);
+        const idToken = await userCredential.user.getIdToken();
+        console.log('Anonymous ID token:', idToken);
+    } catch (error) {
+        console.log('Error:', error);
+    }
+}
+
+getAnonToken().then(() => {
     console.log('done');
 });
